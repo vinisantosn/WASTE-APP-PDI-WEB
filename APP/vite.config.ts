@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     allowedHosts: [
-      '2090-216-238-121-3.ngrok-free.app'
+      'waste-app-pdi-web-1.onrender.com'
     ]
   }
 });
