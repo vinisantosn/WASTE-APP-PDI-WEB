@@ -1,5 +1,6 @@
 import detectorService from "../../services/detector";
 import { Boundbox, ImageInput } from "../../services/detector/types";
+import { caloriasPorGrama } from "../../data";
 
 export default function updateCanvas(
   video: HTMLVideoElement,
@@ -38,8 +39,9 @@ function desenhaBoundbox(
   const w = boundbox.x2 - boundbox.x1;
   const h = boundbox.y2 - boundbox.y1;
 
-  const classe = boundbox.classe;
+  const classe = boundbox.classe as keyof typeof caloriasPorGrama;
   const confianca = boundbox.confianca;
+  const calorias = caloriasPorGrama[classe] || 0;
 
   context.strokeStyle = "green";
   context.lineWidth = 4;
@@ -62,11 +64,18 @@ function desenhaBoundbox(
     context.measureText(`${(confianca * 100).toFixed(0)}%`).width + 8,
     24
   );
+  context.fillRect(
+    x + 1,
+    y + 45,
+    context.measureText(`${calorias} cal/g`).width + 8,
+    24
+  );
 
   // Draw text
   context.fillStyle = "green";
   context.fillText(`${classe}`, x + 4, y + 16);
   context.fillText(`${(confianca * 100).toFixed(0)}%`, x + 4, y + 38);
+  context.fillText(`${calorias} kcal`, x + 4, y + 62);
 }
 
 function escreveMensagemDeErroCanvas(
